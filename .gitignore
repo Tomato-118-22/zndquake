@@ -1,0 +1,7 @@
+dont_push/
+ZundaQuake/
+installer/
+training_files/
+logs/
+.git/
+__pycache__/

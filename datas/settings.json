@@ -1,0 +1,21 @@
+{
+    "version": "-1.0.0",
+    "lang": "ja-JP",
+    "country": "ja",
+    "home-ja": {
+        "main-municipality": "01101",
+        "sub-municipality": [
+            "01101",
+            "04101",
+            "11107",
+            "22101",
+            "23107"
+        ]
+    },
+    "autorun": true,
+    "log-save": false,
+    "show-debug": false,
+    "notify-shindo": 10,
+    "notify-forecast": true,
+    "pref-discrict": 10
+}
