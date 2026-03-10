@@ -30,10 +30,10 @@ jobs:
 
       - name: Build app
         run: |
-          pyinstaller main.py --noconsole --onefile --icon=icons/icon_2048x.ico --add-data "sounds:sounds" --add-data "icons:icons" --add-data "datas:datas" --add-data "images:images" --add-data "run:run"
+          pyinstaller run.pyw --noconsole --onefile --icon=icons/icon_2048x.ico --collect-all PyQt6 --add-data "run:run
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: macos-build
+          name: linux_x86_64-build
           path: dist/
