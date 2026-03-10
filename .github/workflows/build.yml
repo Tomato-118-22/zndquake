@@ -30,7 +30,7 @@ jobs:
 
       - name: Build app
         run: |
-          pyinstaller run.pyw --noconsole --onefile --icon=icons/icon_2048x.ico --collect-all PyQt6 --add-data "run:run
+          pyinstaller autorun.py --noconsole --onefile --collect-all PyQt6
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
