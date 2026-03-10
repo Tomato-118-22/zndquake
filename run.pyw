@@ -29,8 +29,14 @@ else:
 # .pyで直接実行
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-main_exe = os.path.join(BASE_DIR, "main.dist", "main.exe")
 
+IS_MAC = sys.platform == "darwin"
+
+if IS_MAC:
+    main_exe = os.path.join(BASE_DIR, "zndquake", "main.app")
+else:
+    main_exe = os.path.join(BASE_DIR, "main.dist", "main.exe")
+    
 img_path = os.path.join(BASE_DIR, "run", "start.jpg")
 img = cv2.imread(img_path)
 if img is None:
@@ -93,13 +99,23 @@ if not os.path.exists(main_exe):
     )
     sys.exit(1)
 
-p = subprocess.Popen(
-    [main_exe],
-    stdout=subprocess.PIPE,
-    stderr=subprocess.PIPE,
-    text=True,
-    cwd=os.path.dirname(main_exe) # main.exeのフォルダをカレントディレクトリに設定
-)
+
+if IS_MAC:
+    p = subprocess.Popen(
+        ["open", "-a", main_exe],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        cwd=os.path.dirname(main_exe)
+    )
+else:
+    p = subprocess.Popen(
+        [main_exe],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        cwd=os.path.dirname(main_exe)
+    )
 
 # 画像表示時間
 time.sleep(10)
@@ -129,19 +145,33 @@ if test_socket.waitForConnected(500):
 test_socket.close()
 # sys.exit(1)
 
-while True:
-    # 生きているか確認
-    if p.poll() is not None:
-        # 即死の場合失敗
+
+if IS_MAC:
+    # macOSはopen -aがすぐ終了するので、終了コードだけ確認
+    p.wait()
+    if p.returncode != 0:
         _, stderr_output = p.communicate()
-        break
+        root.deiconify()
+        messagebox.showerror("エラー", 
+            "起動時に問題が発生しました。お手数ですが、もう一度お試しください。\n"
+            "もし複数回試しても起動できない場合は、開発者にお問い合わせください。\n\n"
+            + stderr_output.strip())
+        sys.exit(1)
+    sys.exit(0)
+else:
+    while True:
+        # 生きているか確認
+        if p.poll() is not None:
+            # 即死の場合失敗
+            _, stderr_output = p.communicate()
+            break
 
-    # 一定時間生存の場合起動
-    if time.time() - start_time > STARTUP_GRACE_TIME:
-        # ランチャー終了
-        sys.exit(0)
+        # 一定時間生存の場合起動
+        if time.time() - start_time > STARTUP_GRACE_TIME:
+            # ランチャー終了
+            sys.exit(0)
 
-    time.sleep(0.05)
+        time.sleep(0.05)
 
 # 失敗時
 error_message = (
