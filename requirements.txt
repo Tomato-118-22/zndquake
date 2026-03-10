@@ -6,3 +6,4 @@ websocket-client
 pygame
 opencv-python
 numpy
+Pillow
