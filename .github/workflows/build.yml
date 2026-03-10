@@ -25,7 +25,7 @@ jobs:
 
       - name: Build app
         run: |
-          nuitka installer.py --noconsole --onefile --icon="icons/icon_2048x.ico"
+          pyinstaller installer.py --noconsole --onefile --icon="icons/icon_2048x.ico"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
