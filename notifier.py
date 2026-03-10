@@ -114,7 +114,7 @@ CITY_TO_REGION_MAP = {}
 def load_city_to_region_map():
     # 市町村名→地域名JSON読み込み
     global CITY_TO_REGION_MAP
-    json_path = os.path.join(BASE_DIR, os.path.join("datas", "city_to_region.json"))
+    json_path = os.path.join(BASE_DIR, "datas", "city_to_region.json")
     
     try:
         if os.path.exists(json_path):

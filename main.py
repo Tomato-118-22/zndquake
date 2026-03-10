@@ -1247,7 +1247,7 @@ class QuakeInfoWidget(QWidget):
             time_str = eq.get("time", "")[:16]   # "YYYY/MM/DD HH:MM"
             max_scale = eq.get("maxScale", -1)
             scale_str = convert_intensity(max_scale) if max_scale > 0 else "不明"
-            mag = hypo.get("magnitude", "?")
+            mag = hypo.get("magnitude", "不明")
             if info_type == "ScalePrompt":
                 prefix = "【震度速報】 "
             elif info_type == "Destination":
@@ -1365,7 +1365,7 @@ class QuakeInfoWidget(QWidget):
         basic_layout.setSpacing(3)
 
         def row(key, val):
-            lbl = QLabel(f"<b>{key}</b>　{val}")
+            lbl = QLabel(f"<b>{key}</b> {val}")
             lbl.setStyleSheet("font-size: 14px; color: black; background-color: transparent;")
             lbl.setWordWrap(True)
             basic_layout.addWidget(lbl)
@@ -1412,7 +1412,7 @@ class QuakeInfoWidget(QWidget):
         if areas:
             # 市町村名を区域名に変換
             region_names = convert_city_list_to_regions(areas)
-            max_area_lbl = QLabel("【最大震度観測地域】\n" + "　".join(region_names))
+            max_area_lbl = QLabel("【最大震度観測地域】\n" + " ".join(region_names))
             max_area_lbl.setStyleSheet(f"""
                 QLabel {{
                     background-color: {color};
@@ -1454,13 +1454,13 @@ class QuakeInfoWidget(QWidget):
         self.info_layout.addWidget(detail_header)
 
         for scale_val in sorted(scale_pref_map.keys(), reverse=True):
-            scale_str, bg_color = self.SCALE_INFO.get(scale_val, ("?", "#9E9E9E"))
+            scale_str, bg_color = self.SCALE_INFO.get(scale_val, ("不明", "#9E9E9E"))
             pref_map = scale_pref_map[scale_val]
             total = sum(len(v) for v in pref_map.values())
 
             # 震度別セクション
             scale_section = CollapsibleSection(
-                f"震度{scale_str}　({total}地点)",
+                f"震度{scale_str} ({total}地点)",
                 bg_color,
                 indent=0
             )
@@ -1472,12 +1472,12 @@ class QuakeInfoWidget(QWidget):
                 r, g, b = self._darken_hex(bg_color, factor=0.75)
                 pref_color = f"rgb({r},{g},{b})"
                 pref_section = CollapsibleSection(
-                    f"{pref}　({len(addrs)}地点)",
+                    f"{pref} ({len(addrs)}地点)",
                     pref_color,
                     indent=12
                 )
                 for addr in addrs:
-                    pref_section.add_row(f"　{addr}")
+                    pref_section.add_row(f" {addr}")
                 scale_section.add_child_section(pref_section)
 
             self.info_layout.addWidget(scale_section)
@@ -2110,7 +2110,7 @@ class AboutDialog(QDialog):
             entries = data.get("versions", []) if isinstance(data, dict) else data
             lines = []
             for entry in entries:
-                ver  = entry.get("version", "?")
+                ver  = entry.get("version", "不明")
                 date = entry.get("date", "")
                 changes = entry.get("changes", [])
                 lines.append(f"- ver{ver}  ({date})")

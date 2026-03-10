@@ -1,0 +1,9 @@
+pywin32==311
+Requests==2.32.5
+websocket_client==1.9.0
+PyQt6
+notifypy
+websocket-client
+pygame
+opencv-python
+numpy
