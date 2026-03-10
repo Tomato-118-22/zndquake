@@ -25,8 +25,8 @@ jobs:
 
       - name: Build app
         run: |
-          pyinstaller autorun.py --noconsole --onefile --collect-all PyQt6
-          
+          nuitka installer.py --noconsole --onefile --icon="icons/icon_2048x.ico"
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
