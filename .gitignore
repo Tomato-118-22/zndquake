@@ -5,3 +5,5 @@ training_files/
 logs/
 .git/
 __pycache__/
+makku/
+penguin/
