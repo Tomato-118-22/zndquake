@@ -1,4 +1,4 @@
-name: Build Mac App
+name: Build Linux App
 
 on:
   workflow_dispatch:
@@ -6,8 +6,8 @@ on:
     branches: [ main, master ]
 
 jobs:
-  build-macos:
-    runs-on: macos-latest
+  build-linux:
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
@@ -23,24 +23,14 @@ jobs:
           pip install -r requirements.txt
           pip install pyinstaller
 
+      - name: Install Qt dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y libxcb-cursor0
+
       - name: Build app
         run: |
-          pyinstaller installer_mac.py --noconsole --onefile --icon="icons/icon_2048x.ico"
-
-      - name: Install create-dmg
-        run: brew install create-dmg
-
-      - name: Create DMG
-        run: |
-          create-dmg \
-            --volname "ZundaQuake Installer" \
-            --window-pos 200 120 \
-            --window-size 600 400 \
-            --icon-size 100 \
-            --icon "installer_mac.app" 175 120 \
-            --app-drop-link 425 120 \
-            "dist/zundaquakeinstaller_beta1.0.0.dmg" \
-            "dist/installer_mac.app" # .appが存在するパス
+          pyinstaller main.py --noconsole --onefile --icon=icons/icon_2048x.ico --add-data "sounds:sounds" --add-data "icons:icons" --add-data "datas:datas" --add-data "images:images" --add-data "run:run"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
